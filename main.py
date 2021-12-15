@@ -110,17 +110,21 @@ for i, A_n in enumerate(S_sym):
 # find the S cosets
 Ps = []  # store all P's
 Ps_bytes = set()
-for i, A_n in enumerate(S):  # A_ is the current leader of the coset
-    if i == 0:
-        temp = np.zeros((8, 8))
-        for A in S:
-            temp = np.add(temp, A)
-        P1 = Pn = temp / len(S)
-        A1 = A_n
-    else:
-        Pn = A_n @ A1 @ P1 @ A_n @ A1
+temp = np.zeros((8, 8))
+for A in S:
+    temp = np.add(temp, A)
+P1 = Pn = temp / len(S)
+Ps.append(P1)
+
+S_cs = []
+for e1 in candidates:
+    for e2 in candidates:
+        for e3 in candidates:
+            S_cs.append((e1, e2, e3))
+S_cs = [triple_tensor_dot(x) for x in S_cs if x not in S_sym and x not in S_perp][:3]
+for i, A_x in enumerate(S_cs):  # A_ is the current leader of the coset
+    Pn = A_x  @ P1 @ A_x
     Ps.append(Pn)
-    pass
 
 # check orthogonality
 for P_i in Ps:
@@ -136,3 +140,6 @@ with np.printoptions(precision=2, suppress=True):
     for i, P in enumerate(Ps):
         print('Projector {0}: '.format(i), end='\n')
         print(str(P).replace('0.  +0.j', '0.'))
+
+
+# Problem 5
