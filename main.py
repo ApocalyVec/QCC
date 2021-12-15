@@ -69,21 +69,21 @@ print_tensor_triplets(S_perp)
 
 # problem 2 ############################################################################################################
 
-A_t = ('I2', 'X', 'X')
+A_t = ('I2', 'X', 'I')
 S_A_t = [[sym_mult(a1, ss) for a1, ss in zip(A_t, s) ]for s in S_sym]
 S_A_t.sort()
 print('With A1 {0}, we have S\'s coset with A1:'.format(format_triple_tensor(A_t)), end='')
 print_tensor_triplets(S_A_t)
 
 
-A_t = ('Y', 'Z', 'X')
+A_t = ('I2', 'Z', 'I2')
 S_A_t = [[sym_mult(a1, ss) for a1, ss in zip(A_t, s) ]for s in S_sym]
 S_A_t.sort()
 print('With A1 {0}, we have S\'s coset with A1:'.format(format_triple_tensor(A_t)), end='')
 print_tensor_triplets(S_A_t)
 
 
-A_t = ('Y', 'I2', 'Z')
+A_t = ('Z', 'I2', 'I2')
 S_A_t = [[sym_mult(a1, ss) for a1, ss in zip(A_t, s) ]for s in S_sym]
 S_A_t.sort()
 print('With A1 {0}, we have S\'s coset with A1:'.format(format_triple_tensor(A_t)), end='')
@@ -142,4 +142,25 @@ with np.printoptions(precision=2, suppress=True):
         print(str(P).replace('0.  +0.j', '0.'))
 
 
-# Problem 5
+# problem 6 ############################################################################################################
+v1 = np.zeros((8, 1))
+v1[0, 0] = 1
+v2 = np.zeros((8, 1))
+v2[2, 0] = 1
+v3 = np.zeros((8, 1))
+v3[5, 0] = 1
+v4 = np.zeros((8, 1))
+v4[7, 0] = 1
+
+v = (1/2) * (v1 + 1j * v2 + 1j * v3 + v4)
+
+assert np.all(Ps[0] @ v == v)
+
+# problem 7 ############################################################################################################
+for i, p in enumerate(Ps):
+    print('Measureing with P_{0}, gives probability {1}'.format(i, v.transpose().conjugate() @ p @ v))
+
+triple_tensor_dot(('I2', 'X', 'I2')) @ v1
+triple_tensor_dot(('I2', 'X', 'I2')) @ v2
+triple_tensor_dot(('I2', 'X', 'I2')) @ v3
+triple_tensor_dot(('I2', 'X', 'I2')) @ v4
